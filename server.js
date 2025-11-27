@@ -60,10 +60,10 @@ Object.keys(siteRedirects).forEach(key => {
     res.redirect(301, targetUrl);
   });
   
-  // Path with subpaths
-  app.get(`/${key}/:path(*)`, (req, res) => {
+  // Catch all subpaths - use simple wildcard
+  app.use(`/${key}`, (req, res) => {
     const targetUrl = siteRedirects[key];
-    const path = req.params.path ? `/${req.params.path}` : '';
+    const path = req.path;
     const queryString = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';
     const fullUrl = targetUrl + path + queryString;
     console.log(`Redirecting ${key}${path} to ${fullUrl}`);
@@ -91,3 +91,4 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('⚠️  No redirect sites configured. Add SITE1, SITE2, etc. to environment variables.');
   }
 });
+
