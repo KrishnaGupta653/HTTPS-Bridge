@@ -1,0 +1,15 @@
+{
+  "name": "redirect-service",
+  "version": "1.0.0",
+  "description": "Multi-site HTTPS redirect service",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
