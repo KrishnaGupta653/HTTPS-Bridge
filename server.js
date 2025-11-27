@@ -1,10 +1,18 @@
 // server.js
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Trust proxy for proper HTTPS detection
-app.set("trust proxy", 1);
+// Render automatically assigns PORT - must use this for web services
+const PORT = process.env.PORT || 10000;
+
+// Trust proxy for proper HTTPS detection on Render
+app.set("trust proxy", true);
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
 
 // Parse environment variables for site redirects
 function getSiteRedirects() {
@@ -72,10 +80,17 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Redirect service running on port ${PORT}`);
-  console.log("Available redirects:");
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Redirect service running on port ${PORT}`);
+  console.log(`🌐 Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log("📍 Available redirects:");
   Object.entries(siteRedirects).forEach(([key, url]) => {
     console.log(`  /${key} -> ${url}`);
   });
+
+  if (Object.keys(siteRedirects).length === 0) {
+    console.log(
+      "⚠️  No redirect sites configured. Add SITE1, SITE2, etc. to environment variables."
+    );
+  }
 });
